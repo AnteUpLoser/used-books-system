@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.common.R;
-import com.example.pojo.dto.UserDTO;
+import com.example.pojo.dto.UserDto;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/admin/login")
-    public R<String> adminLogin(@RequestBody UserDTO userDTO){
+    public R<String> adminLogin(@RequestBody UserDto userDTO){
         return userService.login(userDTO);
     }
 

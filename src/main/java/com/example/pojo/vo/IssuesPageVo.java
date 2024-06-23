@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class IssuesPageVO {
+public class IssuesPageVo {
     private int pageNum;
     private int pageSize;
     private List<Issue> pageIssues;

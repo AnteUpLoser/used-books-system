@@ -3,7 +3,7 @@ package com.example.service.impl;
 import com.example.common.R;
 import com.example.dao.UserDao;
 import com.example.pojo.bo.User;
-import com.example.pojo.dto.UserDTO;
+import com.example.pojo.dto.UserDto;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public R<String> login(UserDTO userDto) {
+    public R<String> login(UserDto userDto) {
         User user = userDao.selectLoginUser(userDto.getUsername(), userDto.getPassword());
         if(user == null){
             return R.error("没有找到该用户");

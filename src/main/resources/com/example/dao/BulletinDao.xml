@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="com.b0.mybatis.mapper.UserMapper" -->
+<mapper namespace="com.example.dao.BulletinDao">
+    <select id="selectIsDeleteBull" resultType="com.example.pojo.bo.Bulletin">
+        select id,title,content,notify_time,update_time,delete_time,is_delete from bulletin
+        where is_delete = #{isDelete}
+    </select>
+
+    <insert id="insertNewBull" parameterType="com.example.pojo.bo.Bulletin">
+        INSERT INTO bulletin (title, content, notify_time, update_time)
+        VALUES (#{title}, #{content}, #{notifyTime}, #{updateTime})
+    </insert>
+
+    <update id="updateIsDelete" parameterType="map">
+        UPDATE bulletin
+        SET is_delete = 1, delete_time = #{deleteTime}
+        WHERE id = #{bullId}
+    </update>
+
+
+</mapper>

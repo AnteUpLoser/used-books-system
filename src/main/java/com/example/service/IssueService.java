@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.pojo.vo.IssuesPageVO;
+import com.example.pojo.vo.IssuesPageVo;
 
 public interface IssueService {
-    IssuesPageVO getIssues(int pageNum, int pageSize);
+    IssuesPageVo getIssues(int pageNum, int pageSize);
 }
