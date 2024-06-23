@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="com.b0.mybatis.mapper.UserMapper" -->
+<mapper namespace="com.example.dao.UserDao">
+    <select id="selectLoginUser" parameterType="map" resultType="com.example.pojo.bo.User">
+        select uid,username,password,memo
+        from user_info where username = #{username} AND password = #{pwd}
+    </select>
+</mapper>

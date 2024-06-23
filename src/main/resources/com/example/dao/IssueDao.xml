@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="com.b0.mybatis.mapper.UserMapper" -->
+<mapper namespace="com.example.dao.IssueDao">
+    <select id="selectIssue" resultType="com.example.pojo.bo.Issue">
+        select id,uid,username,issue,create_time
+        from user_issue
+    </select>
+</mapper>

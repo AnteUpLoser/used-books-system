@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: used-books-system
+
+  profiles:
+    active: dev
+
+
+  #配置数据库连接
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/used_books_system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: 13000
+
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  pageSizeZero: true
+
+
+
+#开启驼峰映射 字段-属性
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    #日志信息
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+
+
+#配置端口
+server:
+  port: 10086
