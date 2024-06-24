@@ -1,9 +1,10 @@
 package com.example.usedbookssystem;
 
+import com.example.dao.BookDao;
 import com.example.dao.BulletinDao;
 import com.example.dao.IssueDao;
+import com.example.pojo.bo.Book;
 import com.example.pojo.bo.Bulletin;
-import com.example.pojo.bo.Issue;
 import com.example.util.TimeUtil;
 import com.github.pagehelper.PageHelper;
 import org.junit.jupiter.api.Test;
@@ -18,12 +19,14 @@ public class PageTest {
     private IssueDao issueDao;
     @Autowired
     private BulletinDao bulletinDao;
+    @Autowired
+    private BookDao bookDao;
 
 
     @Test
     public void test01(){
         PageHelper.startPage(1,10);
-        List<Issue> list = issueDao.selectIssue();
+        List<Book> list = bookDao.selectBooks();
         System.out.println(list);
     }
 

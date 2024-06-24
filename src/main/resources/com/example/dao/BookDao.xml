@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="com.b0.mybatis.mapper.UserMapper" -->
+<mapper namespace="com.example.dao.BookDao">
+    <select id="selectBooks" resultType="com.example.pojo.bo.Book">
+        select book_id,name,author,cover,publish_from,pages,word_count,isbn
+        from book;
+    </select>
+
+</mapper>
