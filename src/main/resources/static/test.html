@@ -2,155 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulletin Board</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
+    <title>AI Assistant</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            padding: 20px;
         }
-
-        h1, h2 {
-            color: #333;
-        }
-
-        #app {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        button {
-            margin-right: 10px;
-            padding: 5px 10px;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            border: 1px solid #ccc;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        form {
+        #output {
             margin-top: 20px;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        input, textarea {
-            width: 100%;
             padding: 10px;
-            margin-top: 5px;
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap; /* Preserve white space and line breaks */
         }
-
-        button[type="submit"] {
-            margin-top: 10px;
+        #prompt {
+            width: 300px;
+            padding: 10px;
+        }
+        #send {
             padding: 10px 20px;
         }
     </style>
 </head>
 <body>
-<div id="app">
-    <h1>公告通知</h1>
-    <div>
-        <h2>当前公告</h2>
-        <button onclick="fetchBulletins(0)">获取有效公告</button>
-        <button onclick="fetchBulletins(1)">获取删除公告</button>
-        <ul id="bulletin-list"></ul>
-    </div>
+<h1>AI Assistant</h1>
+<input type="text" id="prompt" placeholder="Enter your prompt">
+<button id="send">Send</button>
+<div id="output"></div>
 
-    <div>
-        <h2>新建公告</h2>
-        <form id="new-bulletin-form">
-            <label for="title">标题:</label>
-            <input type="text" id="title" required>
-            <label for="content">内容:</label>
-            <textarea id="content" required></textarea>
-            <button type="submit">提交</button>
-        </form>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('new-bulletin-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            addBulletin();
-        });
+    document.getElementById('send').addEventListener('click', function() {
+        const prompt = document.getElementById('prompt').value;
+        if (prompt) {
+            const output = document.getElementById('output');
+            output.innerHTML = ''; // Clear previous output
+
+            const eventSource = new EventSource(`/sse?prompt=${encodeURIComponent(prompt)}`);
+
+            eventSource.onmessage = function(event) {
+                // Append received data to the existing content
+                output.textContent += event.data;
+                output.scrollTop = output.scrollHeight; // Scroll to the bottom
+            };
+
+            eventSource.onerror = function(event) {
+                console.error('Error:', event);
+                const error = document.createElement('div');
+                // error.textContent = 'An error occurred, please try again.';
+                output.appendChild(error);
+                eventSource.close();
+            };
+        }
     });
-
-    function formatUnixTimestamp(unixTimestamp) {
-        const date = new Date(unixTimestamp);
-        return date.toLocaleString();
-    }
-
-    function fetchBulletins(isDelete) {
-        axios.get(`/get/cur/bulletins/${isDelete}`)
-            .then(response => {
-                const bulletins = response.data.data;
-                const bulletinList = document.getElementById('bulletin-list');
-                bulletinList.innerHTML = '';
-
-                bulletins.forEach(bulletin => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                    <h3>${bulletin.title}</h3>
-                    <p>${bulletin.content}</p>
-                    <p>通知时间: ${formatUnixTimestamp(bulletin.notifyTime)}</p>
-                    <p>更新时间: ${formatUnixTimestamp(bulletin.updateTime)}</p>
-                    ${bulletin.deleteTime ? `<p>删除时间: ${formatUnixTimestamp(bulletin.deleteTime)}</p>` : ''}
-                    <p>状态: ${bulletin.isDelete ? '已删除' : '有效'}</p>
-                    <button onclick="deleteBulletin(${bulletin.id})">删除</button>
-                `;
-                    bulletinList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching bulletins:', error);
-            });
-    }
-
-    function addBulletin() {
-        const title = document.getElementById('title').value;
-        const content = document.getElementById('content').value;
-
-        axios.post('/add/new/bulletin', {
-            title: title,
-            content: content
-        })
-            .then(response => {
-                alert(response.data.message);
-                document.getElementById('title').value = '';
-                document.getElementById('content').value = '';
-                fetchBulletins(0); // Fetch the updated list of bulletins
-            })
-            .catch(error => {
-                console.error('Error adding bulletin:', error);
-            });
-    }
-
-    function deleteBulletin(id) {
-        axios.post('/delete/bulletin', null, { params: { id } })
-            .then(response => {
-                alert(response.data.message);
-                fetchBulletins(0); // Fetch the updated list of bulletins
-            })
-            .catch(error => {
-                console.error('Error deleting bulletin:', error);
-            });
-    }
 </script>
 </body>
 </html>
