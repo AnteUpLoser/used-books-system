@@ -1,0 +1,126 @@
+/* CSS样式可以在这里添加 */
+
+#notice-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    background: linear-gradient(to bottom, #a5d6ea, #77b6e3, #498cdb);
+}
+
+.notice {
+    width: 800px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #20aab7;
+    border-radius: 5px;
+    transition: all 0.5s;
+}
+
+.notice:hover {
+    background-color: #a4d7e7;
+}
+
+p {
+    margin-top: 10px;
+}
+
+.delete-btn {
+    color: red;
+    cursor: pointer;
+}
+
+.new-notice-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.delete-btn {
+    float: right;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    width: 500px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+label,
+input {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+label {
+    margin-left: 100px;
+}
+
+button:last-of-type {
+    display: block;
+    position: relative;
+    padding: 10px 20px;
+    background-color: #498cdb;
+    color: #fff;
+    border-radius: 10px;
+    left: 45%;
+    top: 30px;
+}
+
+#new-notice-btn {
+    position: fixed;
+    top: 90%;
+    z-index: 200;
+    right: 5%;
+    background-color: #fff;
+    color: #000;
+}
+
+.select-box {
+    position: fixed;
+    top: 10%;
+    right: 5%;
+}
+
+.announcement-type {
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+}

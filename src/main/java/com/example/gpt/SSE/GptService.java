@@ -2,22 +2,15 @@ package com.example.gpt.SSE;
 
 
 import com.alibaba.fastjson2.JSON;
-import com.example.gpt.MyEventSourceListener;
 import com.example.gpt.pojo.GptReq;
-import com.example.gpt.pojo.GptRes;
 import okhttp3.*;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSources;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class GptService {
@@ -26,7 +19,7 @@ public class GptService {
 
 
     public GptService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://{}}").build();
+        this.webClient = webClientBuilder.baseUrl("https://api.chatanywhere.tech").build();
     }
 
     public Flux<String> streamOpenAIResponse(String prompt) {
@@ -34,7 +27,7 @@ public class GptService {
         String JSONReqBody = JSON.toJSONString(reqBody);
         return webClient.post()
                 .uri("/v1/chat/completions")
-                .header("Authorization", "Bearer {YOUR-SK}")
+                .header("Authorization", "Bearer sk-u2ecd4cQIQlZ5XQwB10atSqFdFNunMwOQu74e41PksxPDRIX")
                 .header("Content-Type", "application/json")
                 .bodyValue(JSONReqBody)
                 .retrieve()
@@ -77,9 +70,9 @@ public class GptService {
 
                 // 创建 POST 请求
                 Request request = new Request.Builder()
-                        .url("https://...{}/v1/chat/completions")
+                        .url("https://api.chatanywhere.tech/v1/chat/completions")
                         .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer " + "sk-...{}")
+                        .addHeader("Authorization", "Bearer " + "sk-u2ecd4cQIQlZ5XQwB10atSqFdFNunMwOQu74e41PksxPDRIX")
                         .post(requestBody)
                         .build();
 
@@ -122,9 +115,9 @@ public class GptService {
 //
 //        // 创建 POST 请求
 //        Request request = new Request.Builder()
-//                .url("https://{YOUR_GPT}/chat/completions")
+//                .url("https://api.chatanywhere.tech/v1/chat/completions")
 //                .addHeader("Content-Type", "application/json")
-//                .addHeader("Authorization", "Bearer " + "{YOUR_SK}")
+//                .addHeader("Authorization", "Bearer " + "sk-u2ecd4cQIQlZ5XQwB10atSqFdFNunMwOQu74e41PksxPDRIX")
 //                .post(requestBody)
 //                .build();
 //

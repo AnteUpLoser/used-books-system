@@ -6,7 +6,7 @@
 <mapper namespace="com.example.dao.BookDao">
     <select id="selectBooks" resultType="com.example.pojo.bo.Book">
         select book_id,name,author,cover,publish_from,pages,word_count,isbn
-        from book;
+        from book
     </select>
 
 </mapper>

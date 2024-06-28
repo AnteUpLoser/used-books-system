@@ -6,122 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>公告展示</title>
     <link rel="stylesheet" href="css/main.css">
-    <style>
-        /* CSS样式可以在这里添加 */
-        
-        #notice-container {
-            margin-top: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        body {
-            background: linear-gradient(to bottom, #a5d6ea, #77b6e3, #498cdb);
-        }
-        
-        .notice {
-            width: 800px;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #20aab7;
-            border-radius: 5px;
-            transition: all 0.5s;
-        }
-        
-        .notice:hover {
-            background-color: #a4d7e7;
-        }
-        
-        p {
-            margin-top: 10px;
-        }
-        
-        .delete-btn {
-            color: red;
-            cursor: pointer;
-        }
-        
-        .new-notice-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100px;
-        }
-        
-        .delete-btn {
-            float: right;
-        }
-        
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-        
-        .popup-content {
-            width: 500px;
-            height: 300px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-        
-        label,
-        input {
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-        
-        label {
-            margin-left: 100px;
-        }
-        
-        button:last-of-type {
-            display: block;
-            position: relative;
-            padding: 10px 20px;
-            background-color: #498cdb;
-            color: #fff;
-            border-radius: 10px;
-            left: 45%;
-            top: 30px;
-        }
-        
-        #new-notice-btn {
-            position: fixed;
-            top: 90%;
-            z-index: 200;
-            right: 5%;
-            background-color: #fff;
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="css/announcement.css">
 </head>
 
 <body>
@@ -129,10 +14,10 @@
 
         <nav>
             <ul>
-                <li><a href="#books">二手书信息</a></li>
-                <li><a href="#announcements">公告</a></li>
-                <li><a href="#columns">专栏</a></li>
-                <li><a href="#issues">Issue</a></li>
+                <li><a href="books.html">二手书信息</a></li>
+                <li><a href="annoucement.html">公告</a></li>
+                <li><a href="ai.html">ai </a></li>
+                <li><a href="issue.html">Issue</a></li>
             </ul>
         </nav>
     </header>
@@ -140,6 +25,13 @@
         <!-- 公告展示区域 -->
     </div>
     <button id="new-notice-btn" class="new-notice-btn">新建公告</button>
+    <div class="select-box">
+        <label for="announcement-type">选择公告类型:</label>
+        <select id="announcement-type">
+            <option value="0">现有公告</option>
+            <option value="1">已删除公告</option>
+        </select>
+    </div>
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close-btn" id="closePopupBtn">&times;</span>
@@ -155,115 +47,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/announcement.js"></script>
 
-    <script>
-        // JavaScript代码可以在这里添加
-        const notices = [{
-            "id": 1,
-            "title": "震惊，今晚维护服务器",
-            "content": "因为后端程序员太菜了，今晚宣布维护服务器，网站暂停服务至凌晨5点",
-            "notifyTime": 1719133522,
-            "updateTime": 1719133522,
-            "deleteTime": 1719136497,
-            "isDelete": 1
-        }, {
-            "id": 2,
-            "title": "系统升级通知",
-            "content": "我们将在本周末进行系统升级，预计会影响到网站正常访问，请用户提前做好准备。",
-            "notifyTime": 1719133522,
-            "updateTime": 1719133522,
-            "deleteTime": null,
-            "isDelete": 0
-        }];
-
-        const noticeContainer = document.getElementById('notice-container');
-        const newNoticeBtn = document.getElementById('new-notice-btn');
-        let isDelete = 0
-            // 渲染公告
-        function renderNotice(noticeContainer) {
-            axios.get(`/get/cur/bulletins/${isDelete}`)
-                .then(response => {
-                    const notices = response.data.data;
-                    console.log(response.data)
-                    noticeContainer.innerHTML = ''; // 清空容器
-                    notices.forEach(notice => {
-                        const noticeDiv = document.createElement('div');
-                        noticeDiv.classList.add('notice');
-                        noticeDiv.innerHTML = `
-                    <h3>${notice.title}</h3>
-                    <p>${notice.content}</p>
-                    <span class="delete-btn" data-id="${notice.id}">删除</span>
-                `;
-                        noticeContainer.appendChild(noticeDiv);
-                    });
-                })
-                .catch(error => {
-                    console.error('获取公告数据时出错', error);
-                });
-        }
-    renderNotice(noticeContainer)
-        // 渲染所有公告
-        // function renderAllNotices() {
-        //     noticeContainer.innerHTML = '';
-        //     notices.forEach(notice => {
-        //         renderNotice(notice);
-        //     });
-        // }
-        //
-        // // 初始化页面时渲染所有公告
-        // renderAllNotices();
-
-        // 新建公告按钮点击事件
-        document.getElementById('new-notice-btn').addEventListener('click', function() {
-            document.getElementById('popup').style.display = 'block';
-        });
-
-        document.getElementById('closePopupBtn').addEventListener('click', function() {
-            document.getElementById('popup').style.display = 'none';
-        });
-
-        document.getElementById('bulletinForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            document.getElementById('popup').style.display = 'none';
-
-            axios.post('/add/new/bulletin', {
-                    title: title,
-                    content: content
-                })
-                .then(function(response) {
-                    console.log('公告已成功添加:', response);
-                    alert('公告添加成功')
-                    document.getElementById('popup').style.display = 'none';
-                })
-                .catch(function(error) {
-                    console.error('添加公告时出错:', error);
-                });
-        });
-
-
-        // 删除公告按钮点击事件
-        // 删除公告按钮点击事件
-        noticeContainer.addEventListener('click', (event) => {
-            if (event.target.classList.contains('delete-btn')) {
-                const noticeId = event.target.dataset.id;
-
-                // 发送删除公告的请求到后端
-                axios.post(`/delete/bulletin?id=${noticeId}`)
-                    .then(response => {
-                        console.log(`公告 ${noticeId} 已删除`, response);
-
-                        // 删除公告成功后，从页面上移除该公告项
-                        const noticeItem = event.target.closest('.notice');
-                        noticeContainer.removeChild(noticeItem);
-                    })
-                    .catch(error => {
-                        console.error(`删除公告 ${noticeId} 时出错`, error);
-                    });
-            }
-        });
-    </script>
 </body>
 
 </html>

@@ -1,8 +1,9 @@
 let currentPage = 1;
 const pageSize = 10;
+console.log(currentPage,pageSize)
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadFeedback(currentPage);
+console.log(123123)
+// loadFeedback(currentPage);
 
     document.getElementById('prev-page').addEventListener('click', () => {
         if (currentPage > 1) {
@@ -15,15 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage++;
         loadFeedback(currentPage);
     });
-});
 
-function loadFeedback(pageNum) {
-    axios.get(`/get/user/issues?pageNum=${pageNum}&pageSize=${pageSize}`)
+
+function loadFeedback(currentPage) {
+    axios.get(`/get/user/issues?pageNum=1&pageSize=10`)
         .then(response => {
             const feedbackContainer = document.getElementById('feedback-container');
             feedbackContainer.innerHTML = '';
-            const data = response.data;
-
+            console.log(response.data)
+            const data = response.data.data;
+            console.log(data)
             data.forEach(item => {
                 const feedbackItem = document.createElement('div');
                 feedbackItem.className = 'user-issue';

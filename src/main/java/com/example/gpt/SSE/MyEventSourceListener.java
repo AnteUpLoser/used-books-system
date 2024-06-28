@@ -1,4 +1,4 @@
-package com.example.gpt;
+package com.example.gpt.SSE;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -32,10 +32,10 @@ public class MyEventSourceListener extends EventSourceListener {
         JSONObject deltaObject = choicesObject.getJSONObject("delta");
         String content = deltaObject.getString("content");
         try {
-            Thread.sleep(100);
+//            Thread.sleep(100);
             System.out.print(content);
             emitter.send(SseEmitter.event().data(content));
-        } catch (InterruptedException | IOException e) {
+        } catch (IOException e) {
             System.err.println("异常中断了！");
         }
 

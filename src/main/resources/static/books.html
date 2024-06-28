@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手书管理页面</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            width: 80%;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .book-list {
+            margin-top: 20px;
+        }
+        
+        .book-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .book-item {
+            width: 300px;
+            height: 200px;
+            padding: 10px;
+            margin-left: 50px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            position: relative;
+            transition: all 0.5s;
+            border-radius: 10px;
+            border: 0;
+        }
+        
+        .book-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .book-item:hover .tooltip {
+            display: block;
+        }
+        
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            z-index: 100;
+            margin-left: 10px;
+            padding: 10px;
+            background-color: rgb(231, 187, 127);
+            border: 1px solid #ddd;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .book-item span {
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        #addBookButton {
+            margin-top: 20px;
+            position: relative;
+            left: 95%;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .modal-overlay.active {
+            display: block;
+        }
+        
+        .book {
+            display: flex;
+            justify-content: center;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #a5d6ea, #e6f5fa);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+
+        <nav>
+            <ul>
+                <li><a href="books.html">二手书信息</a></li>
+                <li><a href="annoucement.html">公告</a></li>
+                <li><a href="ai.html">ai</a></li>
+                <li><a href="issue.html">Issue</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="header">
+
+            <button id="addBookButton">添加二手书</button>
+        </div>
+        <div class="book-list" id="bookList">
+            <!-- 书籍列表将在这里渲染 -->
+            <div class="book-item">
+                <div class="book"><img src="${book.cover}" alt="${book.name} 封面"></div>
+                <span>${book.name}</span>
+                <span>作者: ${book.author}</span>
+
+                <div class="tooltip">
+                    <p>出版社: ${book.publishFrom}</p>
+                    <p>页数: ${book.pages}</p>
+                    <p>字数: ${book.wordCount}</p>
+                    <p>ISBN: ${book.isbn}</p>
+                </div>
+            </div>
+            <div class="book-item">
+                <h3>${book.name}</h3>
+                <p>作者: ${book.author}</p>
+                <img src="${book.cover}" alt="${book.name} 封面">
+                <div class="tooltip">
+                    <p>出版社: ${book.publishFrom}</p>
+                    <p>页数: ${book.pages}</p>
+                    <p>字数: ${book.wordCount}</p>
+                    <p>ISBN: ${book.isbn}</p>
+                    <p>价格: ${s1}</p>
+                    <p>标签: ${s2}</p>
+                    <p>数量: ${s3}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 添加二手书的弹出框 -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal" id="modal">
+        <h2>添加二手书</h2>
+        <form id="addBookForm">
+            <label>书名: <input type="text" name="name" required></label><br>
+            <label>作者: <input type="text" name="author" required></label><br>
+            <label>封面: <input type="text" name="cover" required></label><br>
+            <label>出版社: <input type="text" name="publishFrom" required></label><br>
+            <label>页数: <input type="number" name="pages" required></label><br>
+            <label>字数: <input type="number" name="wordCount" required></label><br>
+            <label>ISBN: <input type="text" name="isbn" required></label><br>
+            <label>价格: <input type="number" step="0.01" name="price" required></label><br>
+            <label>数量: <input type="number" name="count" required></label><br>
+            <button type="submit">提交</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('addBookButton').addEventListener('click', function() {
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
+        });
+
+        document.getElementById('modalOverlay').addEventListener('click', function() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('modalOverlay').classList.remove('active');
+        });
+
+        document.getElementById('addBookForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const book = {
+                name: formData.get('name'),
+                author: formData.get('author'),
+                cover: formData.get('cover'),
+                publishFrom: formData.get('publishFrom'),
+                pages: Number(formData.get('pages')),
+                wordCount: Number(formData.get('wordCount')),
+                isbn: formData.get('isbn')
+            };
+            const bookInfo = {
+                price: Number(formData.get('price')),
+                count: Number(formData.get('count'))
+            };
+
+            axios.post('/add/new/bookInfo', {
+                    book,
+                    bookInfo
+                })
+                .then(response => {
+                    alert('二手书添加成功');
+                    document.getElementById('modal').classList.remove('active');
+                    document.getElementById('modalOverlay').classList.remove('active');
+                    loadBooks(); // 重新加载书籍列表
+                })
+                .catch(error => {
+                    console.error('Error adding book:', error);
+                });
+        });
+
+        function loadBooks() {
+            axios.get('/get/books?pageNum=1&pageSize=1000')
+                .then(response => {
+                    const books = response.data.data.books;
+                    console.log(books)
+                    const bookList = document.getElementById('bookList');
+                    bookList.innerHTML = ''; // 清空当前列表
+                    books.forEach(book => {
+                        console.log(book)
+                        let s1 = ''
+                        let s2 = ''
+                        let s3 = ''
+
+                        axios.get(`/get/bookInfo/${book.bookId}`)
+                            .then(response => {
+                                let data = response.data.data
+
+                                console.log(data)
+                                s1 = data.price
+                                s2 = data.tags
+                                s3 = data.count
+                                const noticeDiv = document.createElement('div');
+                                noticeDiv.classList.add('book-item');
+                                noticeDiv.setAttribute('data-publishFrom', book.publishFrom);
+                                noticeDiv.setAttribute('data-pages', book.pages);
+                                noticeDiv.setAttribute('data-wordCount', book.wordCount);
+                                noticeDiv.setAttribute('data-isbn', book.isbn);
+                                noticeDiv.setAttribute('data-bookId', book.bookId);
+                                noticeDiv.innerHTML = `
+                             <div class="book"><img src="${book.cover}" alt="${book.name} 封面"></div>
+                            <span>${book.name}</span>
+                            <span>作者: ${book.author}</span>
+                            <div class="tooltip">
+                                <p>出版社: ${book.publishFrom}</p>
+                                <p>页数: ${book.pages}</p>
+                                <p>字数: ${book.wordCount}</p>
+                                <p>价格: ${s1}</p>
+                                <p>标签: ${s2}</p>
+                                <p>数量: ${s3}</p>
+                            </div>
+                        `;
+                                bookList.appendChild(noticeDiv);
+                            })
+                        console.log(s1,s2,s3)
+
+                    });
+                })
+
+        }
+
+        document.addEventListener('DOMContentLoaded', loadBooks);
+    </script>
+</body>
+
+</html>
