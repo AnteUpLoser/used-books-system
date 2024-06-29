@@ -12,23 +12,8 @@ public class GptController {
     @Autowired
     private GptService gptService;
 
-    /*@GetMapping(value = "/stream-openai", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> streamOpenAI(@RequestParam String prompt) {
-        return gptService.streamOpenAIResponse(prompt)
-                .map(response -> "data:" + response + "\n\n");
-    }*/
-
-
-
-//    @GetMapping("/http/get")
-//    public R<String> sendByHttp(@RequestParam String prompt){
-//        return R.success(gptService.sendMsg(prompt));
-//    }
-
-
-
     @GetMapping("/sse")
-    public SseEmitter handleSse(@RequestParam String prompt) throws InterruptedException {
+    public SseEmitter handleSse(@RequestParam String prompt) {
         return gptService.sendMsg(prompt);
     }
 

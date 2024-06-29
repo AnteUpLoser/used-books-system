@@ -3,7 +3,7 @@ const pageSize = 10;
 console.log(currentPage,pageSize)
 
 console.log(123123)
-// loadFeedback(currentPage);
+loadFeedback(currentPage);
 
     document.getElementById('prev-page').addEventListener('click', () => {
         if (currentPage > 1) {
@@ -19,14 +19,16 @@ console.log(123123)
 
 
 function loadFeedback(currentPage) {
-    axios.get(`/get/user/issues?pageNum=1&pageSize=10`)
+    axios.get(`/get/user/issues?pageNum=${currentPage}&pageSize=${pageSize}`)
         .then(response => {
             const feedbackContainer = document.getElementById('feedback-container');
             feedbackContainer.innerHTML = '';
-            console.log(response.data)
-            const data = response.data.data;
-            console.log(data)
+
+            console.log(response.data,11)
+            const data = response.data.data.pageIssues;
+            console.log(data.pageIssues)
             data.forEach(item => {
+                console.log(item)
                 const feedbackItem = document.createElement('div');
                 feedbackItem.className = 'user-issue';
                 feedbackItem.innerHTML = ` <div class="user-information">
@@ -38,8 +40,8 @@ function loadFeedback(currentPage) {
                 feedbackContainer.appendChild(feedbackItem);
             });
 
-            document.getElementById('page-info').textContent = `第 ${pageNum} 页`;
-
+            document.getElementById('page-info').innerHTML = `第 ${currentPage} 页`;
+    console.log(document.getElementById('page-info'))
             // Disable buttons conditionally
             document.getElementById('prev-page').disabled = pageNum === 1;
             document.getElementById('next-page').disabled = data.length < pageSize;

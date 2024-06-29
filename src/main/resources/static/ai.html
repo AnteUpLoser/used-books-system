@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Assistant</title>
+  <style>
+    body {
+      width: 100%;
+      background: linear-gradient(to bottom, #a5d6ea, #f9d29d, #f19c79);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #000000;
+      border-radius: 2px;
+      height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap; /* Preserve white space and line breaks */
+    }
+    #prompt {
+      width: 300px;
+      padding: 10px;
+    }
+    #send {
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>AI Assistant</h1>
+<input type="text" id="prompt" placeholder="Enter your prompt">
+<button id="send">Send</button>
+<div id="output"></div>
+
+<script>
+  document.getElementById('send').addEventListener('click', function() {
+    const prompt = document.getElementById('prompt').value;
+    if (prompt) {
+      const output = document.getElementById('output');
+      output.innerHTML = ''; // Clear previous output
+
+      const eventSource = new EventSource(`/sse?prompt=${encodeURIComponent(prompt)}`);
+
+      eventSource.onmessage = function(event) {
+        // Append received data to the existing content
+        output.textContent += event.data;
+        output.scrollTop = output.scrollHeight; // Scroll to the bottom
+      };
+
+      eventSource.onerror = function(event) {
+        console.error('Error:', event);
+        const error = document.createElement('div');
+        // error.textContent = 'An error occurred, please try again.';
+        output.appendChild(error);
+        eventSource.close();
+      };
+    }
+  });
+</script>

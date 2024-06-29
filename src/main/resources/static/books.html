@@ -122,6 +122,12 @@
             display: flex;
             justify-content: center;
         }
+
+        #cover{
+            max-width: 35%; /* 图像最大宽度为其父元素的100% */
+            max-height: 35%; /* 图像最大高度为其父元素的100% */
+            height: auto; /* 保持宽高比 */
+        }
         
         body {
             background: linear-gradient(to bottom, #a5d6ea, #e6f5fa);
@@ -269,7 +275,7 @@
                                 noticeDiv.setAttribute('data-isbn', book.isbn);
                                 noticeDiv.setAttribute('data-bookId', book.bookId);
                                 noticeDiv.innerHTML = `
-                             <div class="book"><img src="${book.cover}" alt="${book.name} 封面"></div>
+                             <div class="book"><img id= "cover" src="${book.cover}" alt="${book.name} 封面"></div>
                             <span>${book.name}</span>
                             <span>作者: ${book.author}</span>
                             <div class="tooltip">
