@@ -152,6 +152,10 @@
 
             <button id="addBookButton">添加二手书</button>
         </div>
+        <form id="searchForm" style="float: right;margin-top: 30px;margin-right: -75px   ">
+            <input type="text" id="searchInput" name="keyword" placeholder="Enter keyword...">
+            <button type="submit">Search</button>
+        </form>
         <div class="book-list" id="bookList">
             <!-- 书籍列表将在这里渲染 -->
             <div class="book-item">
@@ -246,11 +250,17 @@
                 });
         });
 
-        function loadBooks() {
-            axios.get('/get/books?pageNum=1&pageSize=1000')
+        function loadBooks(url) {
+            axios.get(url)
                 .then(response => {
-                    const books = response.data.data.books;
+                    let books
+                    if(response.data.data.books){
+                        books = response.data.data.books;
+                    }else{
+                        books = response.data.data
+                    }
                     console.log(books)
+
                     const bookList = document.getElementById('bookList');
                     bookList.innerHTML = ''; // 清空当前列表
                     books.forEach(book => {
@@ -295,8 +305,21 @@
                 })
 
         }
+    let url = '/get/books?pageNum=1&pageSize=1000'
+        document.addEventListener('DOMContentLoaded', loadBooks(url));
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const keyword = document.getElementById('searchInput').value;
+            console.log(keyword)
+            if(keyword){
+                let url2 = `/search/books?vagueInfo=${keyword}`
+                console.log(url2)
+                loadBooks(url2);
+            }else{
+                loadBooks(url)
+            }
 
-        document.addEventListener('DOMContentLoaded', loadBooks);
+        });
     </script>
 </body>
 

@@ -6,6 +6,8 @@ import com.example.service.IssueService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class IssueController {
@@ -17,4 +19,5 @@ public class IssueController {
                                      @RequestParam(defaultValue = "10") Integer pageSize){
         return R.success(issueService.getIssues(pageNum, pageSize));
     }
+
 }

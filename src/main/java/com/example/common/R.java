@@ -20,6 +20,14 @@ public class R<T> {
         return r;
     }
 
+    public static <T> R<T> success(T object,String msg){
+        R<T> r = new R<>();
+        r.data = object;
+        r.code = 1;
+        r.msg = "成功";
+        return r;
+    }
+
     public static <T> R<T> success(){
         R<T> r = new R<>();
         r.data = null;

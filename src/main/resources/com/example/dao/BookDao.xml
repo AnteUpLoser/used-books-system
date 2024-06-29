@@ -9,4 +9,14 @@
         from book
     </select>
 
+    <select id="selectVagueBooks" resultType="com.example.pojo.bo.Book">
+        select book_id,name,author,cover,publish_from,pages,word_count,isbn
+        from book
+        where name like concat('%', #{pattern}, '%')
+           or author like concat('%', #{pattern}, '%')
+           or isbn like concat('%', #{pattern}, '%')
+           or publish_from like concat('%', #{pattern}, '%')
+    </select>
+
+
 </mapper>

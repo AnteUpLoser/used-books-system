@@ -85,41 +85,13 @@ public class BookController {
         return R.success(bookTagsVo);
     }
 
-    //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*private void copyNonNullProperties(Object source, Object target) {
-        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(source.getClass());
-        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-            try {
-                Method readMethod = propertyDescriptor.getReadMethod();
-                Method writeMethod = BeanUtils.getPropertyDescriptor(target.getClass(), propertyDescriptor.getName()).getWriteMethod();
-                if (readMethod != null && writeMethod != null) {
-                    Object value = readMethod.invoke(source);
-                    if (value != null) {
-                        writeMethod.invoke(target, value);
-                    }
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }*/
+    //模糊查询书籍信息
+    @GetMapping("/search/books")
+    public R<List<Book>> VagueSearchBooks(@RequestParam String vagueInfo){
+        List<Book> bookList = bookDao.selectVagueBooks(vagueInfo);
+        if(bookList == null) return R.success(Collections.emptyList(),"无相关书籍信息");
+        return R.success(bookList);
+    }
 
 
 }

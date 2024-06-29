@@ -8,4 +8,5 @@
         select id,uid,username,issue,create_time
         from user_issue
     </select>
+
 </mapper>
