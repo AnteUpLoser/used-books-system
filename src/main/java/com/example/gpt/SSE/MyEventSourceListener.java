@@ -31,10 +31,10 @@ public class MyEventSourceListener extends EventSourceListener {
         JSONObject deltaObject = choicesObject.getJSONObject("delta");
         String content = deltaObject.getString("content");
         try {
-//            Thread.sleep(100);
+            Thread.sleep(100);
             System.out.print(content);
             emitter.send(SseEmitter.event().data(content));
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.err.println("异常中断了！");
         }
 
