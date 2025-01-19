@@ -13,7 +13,6 @@ spring:
     username: root
     password: 13000
 
-
 pagehelper:
   helperDialect: mysql
   reasonable: true
